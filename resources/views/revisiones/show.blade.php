@@ -3,16 +3,28 @@
 @section('title', 'Periodo '.$periodo->etiquetaPeriodo())
 
 @section('content')
-    <x-page-header :title="'Revisión '.$periodo->etiquetaPeriodo()" icon="journal-check" :subtitle="$periodo->estado->etiqueta()">
+    <x-page-header
+        :title="'Revisión '.$periodo->etiquetaPeriodo()"
+        icon="journal-check"
+        section="Revisión de balance"
+        :subtitle="$periodo->estado->etiqueta()"
+        :parent="['url' => route('revisiones.index'), 'label' => 'Listado']"
+    >
+        <x-page-action-group label="Navegación">
+            <x-action-btn variant="nav" icon="arrow-left" label="Volver al listado" :href="route('revisiones.index')" />
+        </x-page-action-group>
         <x-page-action-group label="Consultas">
             <x-action-btn variant="nav" icon="diagram-2" label="Diagrama de estados" data-bs-toggle="modal" data-bs-target="#diagrama-modal" />
+            @can('reporte', $periodo)
+                <x-action-btn variant="export" icon="file-earmark-pdf" label="Reporte PDF" :href="route('revisiones.pdf', $periodo)" />
+            @endcan
         </x-page-action-group>
-        @can('reporte', $periodo)
-            <x-action-btn variant="export" icon="file-earmark-pdf" label="Reporte PDF" :href="route('revisiones.pdf', $periodo)" />
-        @endcan
         @can('update', $periodo)
-            <x-action-btn variant="edit" icon="pencil" label="Editar" :href="route('revisiones.edit', $periodo)" />
+            <x-page-action-group label="Registro">
+                <x-action-btn variant="edit" icon="pencil-square" label="Editar" :href="route('revisiones.edit', $periodo)" />
+            </x-page-action-group>
         @endcan
+        @include('revisiones.partials.botones-flujo', ['periodo' => $periodo, 'accionesFlujo' => $accionesFlujo])
     </x-page-header>
 
     @include('partials.alerts')
@@ -23,27 +35,6 @@
         <div class="col-md-3"><div class="card"><div class="card-body small">Patrimonio<strong class="d-block fs-5">{{ number_format((float) $periodo->total_patrimonio, 2) }}</strong></div></div></div>
         <div class="col-md-3"><div class="card"><div class="card-body small">Integridad<strong class="d-block fs-5 {{ $periodo->integridad_ok ? 'text-success' : 'text-danger' }}">{{ $periodo->integridad_ok ? 'OK' : 'Incumplida' }}</strong></div></div></div>
     </div>
-
-    @if ($accionesFlujo !== [])
-        <div class="card mb-3">
-            <div class="card-header">Flujo de aprobación</div>
-            <div class="card-body d-flex flex-wrap gap-2">
-                @foreach ($accionesFlujo as $accion)
-                    <form method="POST" action="{{ route('revisiones.flujo', [$periodo, $accion]) }}" class="d-inline">
-                        @csrf
-                        @if ($accion === 'rechazar')
-                            <div class="input-group input-group-sm">
-                                <input type="text" name="comentario" class="form-control" placeholder="Motivo del rechazo" required>
-                                <button class="btn btn-outline-danger">{{ \App\Services\RevisionBalanceFlujoService::ETIQUETAS[$accion] }}</button>
-                            </div>
-                        @else
-                            <button class="btn btn-sm btn-primary">{{ \App\Services\RevisionBalanceFlujoService::ETIQUETAS[$accion] }}</button>
-                        @endif
-                    </form>
-                @endforeach
-            </div>
-        </div>
-    @endif
 
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-balanza" type="button">Balanza</button></li>

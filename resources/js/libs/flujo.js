@@ -96,7 +96,12 @@ export function initFormulariosFlujo() {
             return;
         }
 
-        form.querySelector('input[name="observaciones"]').value = observaciones;
+        const campo = form.dataset.observacionesCampo || 'observaciones';
+        const input = form.querySelector(`input[name="${campo}"]`);
+
+        if (input) {
+            input.value = observaciones;
+        }
         form.dataset.enviado = '1';
         form.submit();
     });
