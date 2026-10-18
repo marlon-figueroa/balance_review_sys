@@ -1,5 +1,5 @@
 const subnav = document.querySelector('.perfil-subnav');
-const secciones = ['informacion', 'seguridad', 'proyectos', 'requerimientos'];
+const secciones = ['informacion', 'seguridad'];
 
 if (window.location.hash) {
     const destino = document.querySelector(window.location.hash);

@@ -6,7 +6,7 @@
         <input type="text" id="name" name="name" value="{{ old('name', $permission->name) }}" placeholder="modulo.accion"
                class="form-control @error('name') is-invalid @enderror" required autofocus>
         @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-        <div class="form-text">Formato <code>modulo.accion</code>, por ejemplo <code>requerimientos.ver</code>.</div>
+        <div class="form-text">Formato <code>modulo.accion</code>, por ejemplo <code>revisiones.ver</code>.</div>
     </div>
 </div>
 
