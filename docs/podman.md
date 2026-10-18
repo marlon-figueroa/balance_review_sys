@@ -42,6 +42,24 @@ podman compose up -d --build
 
 Tras migraciones y seeders, la app queda en http://localhost:8080.
 
+### Assets de Vite (`/build/assets/…`)
+
+Nginx sirve los archivos estáticos y PHP-FPM lee `public/build/manifest.json`. Deben ser **los mismos** en ambos contenedores.
+
+En desarrollo, `compose.yaml` monta `./public/build` desde tu máquina. Después de cambiar JS o CSS:
+
+```bash
+npm run build
+podman compose up -d app nginx   # recrea contenedores si cambiaste el compose
+```
+
+Si ves **404** en `/build/assets/app-….js`, suele ser que solo reconstruiste `app` y no `nginx`, o que falta compilar en el host:
+
+```bash
+npm run build
+podman compose up -d --build app nginx
+```
+
 Usuarios demo (contraseña `password`):
 
 | Rol | Correo |

@@ -11,6 +11,8 @@ services:
     env_file: podman/env/app.env
     volumes:
       - storage:/var/www/html/storage
+      # Mismo manifest y chunks que en el host tras `npm run build` (nginx sirve /build).
+      - ./public/build:/var/www/html/public/build:ro
     depends_on:
       mysql:
         condition: service_healthy
@@ -26,6 +28,7 @@ services:
       - "${APP_PORT:-8080}:80"
     volumes:
       - storage:/var/www/html/storage:ro
+      - ./public/build:/var/www/html/public/build:ro
     depends_on:
       - app
     healthcheck:
