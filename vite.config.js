@@ -16,6 +16,7 @@ export default defineConfig({
                 'resources/js/pages/bitacora.js',
                 'resources/js/pages/home.js',
                 'resources/js/pages/revisiones-index.js',
+                'resources/js/pages/revision-show.js',
                 'resources/js/pages/catalogo-cuentas.js',
             ],
             refresh: true,

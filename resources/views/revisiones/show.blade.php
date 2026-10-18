@@ -4,6 +4,9 @@
 
 @section('content')
     <x-page-header :title="'Revisión '.$periodo->etiquetaPeriodo()" icon="journal-check" :subtitle="$periodo->estado->etiqueta()">
+        <x-page-action-group label="Consultas">
+            <x-action-btn variant="nav" icon="diagram-2" label="Diagrama de estados" data-bs-toggle="modal" data-bs-target="#diagrama-modal" />
+        </x-page-action-group>
         @can('reporte', $periodo)
             <x-action-btn variant="export" icon="file-earmark-pdf" label="Reporte PDF" :href="route('revisiones.pdf', $periodo)" />
         @endcan

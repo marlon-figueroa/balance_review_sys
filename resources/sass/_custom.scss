@@ -571,6 +571,48 @@ body {
     }
 }
 
+.modal-dialog.modal-diagrama {
+    --bs-modal-width: calc(100vw - 2rem);
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    height: calc(100vh - 2rem);
+    margin: 1rem auto;
+
+    .modal-content {
+        height: 100%;
+    }
+}
+
+.diagrama-estados {
+    width: 100%;
+    overflow: auto;
+
+    > .joint-paper {
+        margin-inline: auto;
+    }
+
+    svg {
+        display: block;
+    }
+}
+
+.diagrama-leyenda {
+    display: inline-block;
+    width: 0.65rem;
+    height: 0.65rem;
+    margin-right: 0.25rem;
+    border-radius: 50%;
+    vertical-align: baseline;
+
+    &--registrador {
+        background-color: var(--bs-primary);
+    }
+
+    &--revisor {
+        background-color: #6f42c1;
+    }
+}
+
 // Pulse y Log Viewer incrustados en las pestañas de la bitácora
 .panel-embebido {
     display: block;

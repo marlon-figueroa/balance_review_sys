@@ -19,6 +19,29 @@ enum EstadoPeriodoRevision: string
         };
     }
 
+    public function hex(): string
+    {
+        return match ($this) {
+            self::Borrador => '#6c757d',
+            self::EnRevision => '#ffc107',
+            self::Aprobado => '#0dcaf0',
+            self::Certificado => '#198754',
+        };
+    }
+
+    /**
+     * @return list<self>
+     */
+    public function transicionesPermitidas(): array
+    {
+        return match ($this) {
+            self::Borrador => [self::EnRevision],
+            self::EnRevision => [self::Aprobado, self::Borrador],
+            self::Aprobado => [self::Certificado, self::Borrador],
+            self::Certificado => [],
+        };
+    }
+
     public function puedeTransicionarA(self $destino): bool
     {
         return match ($this) {

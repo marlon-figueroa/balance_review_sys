@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Revisiones\PeriodoRevisionRequest;
 use App\Models\CuentaContable;
 use App\Models\PeriodoRevision;
+use App\Services\RevisionBalanceDiagramaService;
 use App\Services\RevisionBalanceFlujoService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
@@ -77,14 +78,18 @@ class PeriodoRevisionController extends Controller
         return redirect()->route('revisiones.show', $periodo)->with('success', 'Periodo creado.');
     }
 
-    public function show(PeriodoRevision $periodo, RevisionBalanceFlujoService $flujo): View
-    {
+    public function show(
+        PeriodoRevision $periodo,
+        RevisionBalanceFlujoService $flujo,
+        RevisionBalanceDiagramaService $diagrama,
+    ): View {
         $periodo->load(['lineasBalanza', 'conciliaciones', 'hallazgos', 'ajustes.usuario', 'historial.usuario', 'creador']);
 
         return view('revisiones.show', [
             'periodo' => $periodo,
             'accionesFlujo' => $flujo->accionesDisponibles($periodo, auth()->user()),
             'cuentasCatalogo' => CuentaContable::query()->activas()->ordenadas()->get(['codigo', 'nombre']),
+            'diagrama' => $diagrama->diagrama($periodo),
         ]);
     }
 
