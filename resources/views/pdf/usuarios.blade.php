@@ -60,7 +60,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">No hay usuarios que coincidan con los filtros.</td>
+                    <td colspan="5" class="text-center">No hay registros</td>
                 </tr>
             @endforelse
         </tbody>

@@ -24,13 +24,17 @@
     <table>
         <thead><tr><th>Severidad</th><th>Título</th><th>Descripción</th></tr></thead>
         <tbody>
-            @foreach ($periodo->hallazgos as $h)
+            @forelse ($periodo->hallazgos as $h)
                 <tr>
                     <td>{{ $h->severidad->value }}</td>
                     <td>{{ $h->titulo }}</td>
                     <td>{{ $h->descripcion }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="3">No hay registros</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 
@@ -46,13 +50,17 @@
     <table>
         <thead><tr><th>Cuenta</th><th>Monto</th><th>Descripción</th></tr></thead>
         <tbody>
-            @foreach ($periodo->ajustes->where('estado', 'aprobado') as $ajuste)
+            @forelse ($periodo->ajustes->where('estado', 'aprobado') as $ajuste)
                 <tr>
                     <td>{{ $ajuste->codigo_cuenta }}</td>
                     <td>{{ number_format((float) $ajuste->monto, 2) }}</td>
                     <td>{{ $ajuste->descripcion }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="3">No hay registros</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </body>

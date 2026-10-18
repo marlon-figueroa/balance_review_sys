@@ -220,4 +220,10 @@
             </ul>
         </div>
     </div>
+
+    @include('revisiones.partials.diagrama')
 @endsection
+
+@push('scripts')
+    @vite('resources/js/pages/revision-show.js')
+@endpush
