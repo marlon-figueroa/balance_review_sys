@@ -111,7 +111,12 @@ class PeriodoRevisionController extends Controller
 
         $periodo->load(['lineasBalanza', 'hallazgos', 'ajustes', 'creador', 'certificador']);
 
-        return Pdf::loadView('revisiones.pdf', compact('periodo'))
+        return Pdf::loadView('revisiones.pdf', [
+            'periodo' => $periodo,
+            'generadoEn' => now(),
+            'generadoPor' => auth()->user()->name,
+        ])
+            ->setOption('isPhpEnabled', true)
             ->download('revision_balance_'.str_replace('/', '-', $periodo->etiquetaPeriodo()).'.pdf');
     }
 }

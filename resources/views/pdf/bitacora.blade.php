@@ -9,8 +9,6 @@
         header { position: fixed; top: -70px; left: 0; right: 0; height: 60px; border-bottom: 2px solid {{ config('branding.primary') }}; }
         header h1 { margin: 0; font-size: 16px; color: {{ config('branding.primary') }}; }
         header .meta { font-size: 9px; color: #6c757d; }
-        footer { position: fixed; bottom: -40px; left: 0; right: 0; height: 30px; font-size: 8px; color: #6c757d; text-align: right; }
-        footer .page:after { content: counter(page); }
         .filtros { margin-bottom: 8px; }
         .filtros span { display: inline-block; background: #e9ecef; padding: 2px 6px; border-radius: 3px; margin-right: 4px; }
         table { width: 100%; border-collapse: collapse; }
@@ -28,10 +26,6 @@
         <h1>{{ config('app.name') }} &mdash; Bitácora</h1>
         <div class="meta">Generado el {{ now()->format('d/m/Y H:i') }} por {{ auth()->user()->name }}</div>
     </header>
-
-    <footer>
-        Página <span class="page"></span>
-    </footer>
 
     @if ($filtros)
         <div class="filtros">
@@ -85,5 +79,7 @@
     @if ($registros->count() >= $limite)
         <p class="aviso">Se muestran solo los {{ $limite }} registros más recientes; refine los filtros para acotar el reporte.</p>
     @endif
+
+    @include('pdf.partials.numeracion-paginas')
 </body>
 </html>

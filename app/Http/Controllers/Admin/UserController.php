@@ -155,6 +155,7 @@ class UserController extends Controller
         ]);
 
         return Pdf::loadView('pdf.usuarios', compact('users', 'filtros'))
+            ->setOption('isPhpEnabled', true)
             ->setPaper('letter', 'landscape')
             ->stream('usuarios_'.now()->format('Ymd_His').'.pdf');
     }

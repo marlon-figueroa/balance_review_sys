@@ -4,15 +4,30 @@
     <meta charset="utf-8">
     <title>Revisión {{ $periodo->etiquetaPeriodo() }}</title>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
-        h1 { font-size: 18px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        @page { margin: 90px 30px 60px 30px; }
+        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #212529; }
+        header { position: fixed; top: -70px; left: 0; right: 0; height: 60px; border-bottom: 2px solid {{ config('branding.primary') }}; }
+        header h1 { margin: 0; font-size: 16px; color: {{ config('branding.primary') }}; }
+        header .meta { font-size: 10px; color: #6c757d; margin-top: 4px; }
+        h2 { font-size: 14px; margin-top: 16px; margin-bottom: 6px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
         th, td { border: 1px solid #ccc; padding: 4px 6px; text-align: left; }
         th { background: #f5f5f5; }
     </style>
 </head>
 <body>
-    <h1>Informe de revisión de balance — {{ $periodo->etiquetaPeriodo() }}</h1>
+    @php
+        $generadoEn = $generadoEn ?? now();
+        $generadoPor = $generadoPor ?? auth()->user()?->name ?? '—';
+    @endphp
+
+    <header>
+        <h1>{{ config('app.name') }} &mdash; Informe de revisión de balance ({{ $periodo->etiquetaPeriodo() }})</h1>
+        <div class="meta">
+            Generado el {{ $generadoEn->format('d/m/Y H:i') }} por {{ $generadoPor }}
+        </div>
+    </header>
+
     <p>Estado: {{ $periodo->estado->etiqueta() }} | Certificado: {{ $periodo->certificado_at?->format('d/m/Y') ?? '—' }}</p>
 
     <h2>Resumen contable</h2>
@@ -63,5 +78,7 @@
             @endforelse
         </tbody>
     </table>
+
+    @include('pdf.partials.numeracion-paginas')
 </body>
 </html>

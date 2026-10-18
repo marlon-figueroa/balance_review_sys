@@ -172,6 +172,7 @@ class BitacoraController extends Controller
             'filtros' => $filtros,
             'limite' => self::LIMITE_PDF,
         ])
+            ->setOption('isPhpEnabled', true)
             ->setPaper('letter', 'landscape')
             ->stream('bitacora_'.now()->format('Ymd_His').'.pdf');
     }
