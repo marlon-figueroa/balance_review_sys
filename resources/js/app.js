@@ -10,8 +10,6 @@ import { initSidebar } from './libs/sidebar';
 import { initFeatherIcons, refreshFeatherIcons, feather } from './libs/feather';
 import { Swal, initAlerts, alertMessage, confirmAction, success, error, warning, info } from './libs/alerts';
 import { initGlobalLoading, showLoading, hideLoading } from './libs/loading';
-import { initNotificaciones } from './libs/notificaciones';
-
 window.Swal = Swal;
 
 window.App = {
@@ -52,6 +50,5 @@ initDatePickers();
 initComponents();
 registerDeleteHandler();
 initAlerts();
-initNotificaciones();
 
 document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => new window.bootstrap.Tooltip(el));

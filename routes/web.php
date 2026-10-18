@@ -5,7 +5,6 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\Revisiones\AjusteContableController;
 use App\Http\Controllers\Revisiones\CargarCatalogoBalanzaController;
@@ -30,10 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::get('perfil', [PerfilController::class, 'show'])->name('perfil.show');
     Route::put('perfil', [PerfilController::class, 'update'])->name('perfil.update');
     Route::put('perfil/contrasena', [PerfilController::class, 'updatePassword'])->name('perfil.password');
-
-    Route::get('notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
-    Route::post('notificaciones/{id}/leida', [NotificacionController::class, 'marcarLeida'])->name('notificaciones.leida');
-    Route::post('notificaciones/leidas', [NotificacionController::class, 'marcarTodasLeidas'])->name('notificaciones.leidas');
 
     Route::post('impersonate/take/{id}', [ImpersonateController::class, 'take'])
         ->name('impersonate')
