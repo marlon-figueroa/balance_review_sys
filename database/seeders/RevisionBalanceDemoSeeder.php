@@ -25,10 +25,8 @@ class RevisionBalanceDemoSeeder extends Seeder
         $certificado = PeriodoRevision::create([
             'anio' => 2026,
             'mes' => 9,
-            'estado' => EstadoPeriodoRevision::Certificado,
+            'estado' => EstadoPeriodoRevision::Borrador,
             'usuario_creador_id' => $registrador->id,
-            'certificado_por_id' => $aprobador->id,
-            'certificado_at' => now()->subMonth(),
         ]);
 
         $catalogo->cargarDemostrativoEquilibrado($certificado);
@@ -40,6 +38,11 @@ class RevisionBalanceDemoSeeder extends Seeder
             'diferencia' => 0,
         ]);
         $proceso->ejecutar($certificado->fresh(['lineasBalanza', 'conciliaciones']));
+        $certificado->update([
+            'estado' => EstadoPeriodoRevision::Certificado,
+            'certificado_por_id' => $aprobador->id,
+            'certificado_at' => now()->subMonth(),
+        ]);
 
         $borrador = PeriodoRevision::create([
             'anio' => 2026,

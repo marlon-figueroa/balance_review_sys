@@ -23,7 +23,16 @@ Generar variables de entorno:
 sh podman/setup.sh
 ```
 
-Verifica que `DB_PASSWORD` en `podman/env/app.env` coincida con `MYSQL_PASSWORD` en `podman/env/mysql.env`.
+Verifica que `DB_PASSWORD` en `podman/env/app.env` coincida con `MYSQL_PASSWORD` en `podman/env/mysql.env`, y que `DB_DATABASE` / `DB_USERNAME` coincidan con `MYSQL_DATABASE` / `MYSQL_USER`.
+
+**Importante:** MySQL solo aplica usuario, contraseña y base de datos la **primera vez** que arranca (volumen vacío). Si cambias `podman/env/mysql.env` después, hay que **recrear el volumen** o seguirás viendo `Access denied`:
+
+```bash
+sh podman/recreate-mysql.sh
+podman compose up -d --build app nginx
+```
+
+Eso **borra todos los datos** de la base en contenedor.
 
 ## 2. Compilar y levantar
 
