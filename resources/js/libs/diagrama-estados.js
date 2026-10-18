@@ -321,6 +321,32 @@ function centro(nodo) {
     return { p: nodo.p + nodo.largo / 2, c: nodo.c + nodo.ancho / 2 };
 }
 
+/** Evita que un retroceso en la misma fila atraviese estados intermedios (p. ej. rechazo a borrador). */
+function arcoRetrocesoMismaFila(origen, destino, o, ubicaciones) {
+    const desde = centro(origen);
+    const hasta = centro(destino);
+    let bordeInferior = 0;
+
+    ubicaciones.forEach((nodo) => {
+        if (nodo.cruzado === origen.cruzado) {
+            bordeInferior = Math.max(bordeInferior, nodo.c + nodo.ancho);
+        }
+    });
+
+    const lineaArco = bordeInferior + ALTURA_BUCLE;
+
+    return {
+        source: { anchor: { name: o.finCruzado } },
+        target: { anchor: { name: o.finCruzado } },
+        vertices: [
+            vector(o, desde.p, lineaArco),
+            vector(o, hasta.p, lineaArco),
+        ],
+        distanciaEtiqueta: 0.5,
+        desfaseEtiqueta: vector(o, 0, 10),
+    };
+}
+
 function codo(origen, destino, baja, o) {
     const avanza = destino.principal > origen.principal;
     const desde = centro(origen);
@@ -371,9 +397,13 @@ function geometria(transicion, { o, ubicaciones }) {
     if (origen.cruzado === destino.cruzado) {
         const avanza = destino.principal > origen.principal;
 
+        if (!avanza) {
+            return arcoRetrocesoMismaFila(origen, destino, o, ubicaciones);
+        }
+
         return {
-            source: { anchor: { name: avanza ? o.finPrincipal : o.inicioPrincipal } },
-            target: { anchor: { name: avanza ? o.inicioPrincipal : o.finPrincipal } },
+            source: { anchor: { name: o.finPrincipal } },
+            target: { anchor: { name: o.inicioPrincipal } },
             vertices: [],
             desfaseEtiqueta: vector(o, 0, -6),
         };
@@ -397,6 +427,7 @@ function geometria(transicion, { o, ubicaciones }) {
 function crearNodo(id, estado, posicion, alcanzado, colores, medida) {
     if (id === INICIO) {
         return new Inicial({
+            z: 2,
             position: posicion,
             attrs: {
                 body: { fill: alcanzado ? colores.texto : colores.borde },
@@ -409,6 +440,7 @@ function crearNodo(id, estado, posicion, alcanzado, colores, medida) {
         const color = alcanzado ? colores.texto : colores.borde;
 
         return new Final({
+            z: 2,
             position: posicion,
             attrs: {
                 exterior: { stroke: color },
@@ -457,6 +489,7 @@ function crearNodo(id, estado, posicion, alcanzado, colores, medida) {
     }
 
     return new Estado({
+        z: 2,
         position: posicion,
         size: { width: medida.width, height: medida.height },
         markup: markupEstado(bloques.length),
@@ -472,6 +505,7 @@ function crearTransicion(transicion, origen, destino, recorrida, disposicion, co
         : '';
 
     return new shapes.standard.Link({
+        z: 1,
         source: { id: origen.id, ...source },
         target: { id: destino.id, ...target },
         vertices,
@@ -529,6 +563,15 @@ export function initDiagramaEstados(contenedor, datos) {
             : calcularDisposicion(ids, 'vertical', medidas, ubicacion);
         const proporcion = disponible / disposicion.ancho;
         const escala = proporcion >= 0.8 ? Math.min(1, proporcion) : 1;
+        const hayRetroceso = datos.transiciones.some((transicion) => {
+            const origen = disposicion.ubicaciones.get(transicion.origen);
+            const destino = disposicion.ubicaciones.get(transicion.destino);
+
+            return origen && destino
+                && origen.cruzado === destino.cruzado
+                && destino.principal < origen.principal;
+        });
+        const margenInferior = hayRetroceso ? ALTURA_BUCLE + MARGEN : 0;
         const colores = coloresTema();
         const grafico = new dia.Graph({}, { cellNamespace: namespace });
         const nodos = new Map();
@@ -558,13 +601,14 @@ export function initDiagramaEstados(contenedor, datos) {
         papel = new dia.Paper({
             model: grafico,
             width: Math.floor(disposicion.ancho * escala),
-            height: Math.ceil(disposicion.alto * escala),
+            height: Math.ceil((disposicion.alto + margenInferior) * escala),
             async: false,
             frozen: true,
             interactive: false,
             cellViewNamespace: namespace,
             defaultConnectionPoint: { name: 'anchor' },
             background: { color: 'transparent' },
+            sorting: dia.Paper.sorting.APPROX,
         });
         papel.scale(escala);
         contenedor.replaceChildren(papel.el);
