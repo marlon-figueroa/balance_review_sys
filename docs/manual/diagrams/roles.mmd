@@ -1,0 +1,12 @@
+flowchart TB
+    REG["Registrador\nCarga · Edita · Envía"]
+    REV["Revisor\nRevisa · Aprueba/Rechaza"]
+    APR["Aprobador\nAprueba · Certifica"]
+    GER["Gerencia\nConsulta · Reportes PDF"]
+    ADM["Administrador\nUsuarios · Bitácora"]
+
+    REG -->|"No certifica"| REV
+    REV --> APR
+    APR --> GER
+    ADM -.-> REG
+    ADM -.-> REV

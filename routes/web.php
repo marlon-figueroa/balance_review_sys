@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ManualProyectoController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\Revisiones\AjusteContableController;
 use App\Http\Controllers\Revisiones\CargarCatalogoBalanzaController;
@@ -25,6 +26,7 @@ Auth::routes();
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('docs/manual-sistema.pdf', ManualProyectoController::class)->name('docs.manual');
 
     Route::get('perfil', [PerfilController::class, 'show'])->name('perfil.show');
     Route::put('perfil', [PerfilController::class, 'update'])->name('perfil.update');

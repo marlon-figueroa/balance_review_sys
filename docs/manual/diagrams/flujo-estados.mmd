@@ -1,0 +1,9 @@
+stateDiagram-v2
+    direction LR
+    [*] --> Borrador
+    Borrador --> EnRevision: Enviar
+    EnRevision --> Aprobado: Aprobar
+    EnRevision --> Borrador: Rechazar
+    Aprobado --> Certificado: Certificar
+    Aprobado --> Borrador: Rechazar
+    Certificado --> [*]

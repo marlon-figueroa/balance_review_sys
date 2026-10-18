@@ -1,0 +1,10 @@
+flowchart LR
+    A[Crear periodo] --> B[Importar CSV / catálogo demo]
+    B --> C{Integridad A = P + PT}
+    C -->|OK| D[Conciliaciones y hallazgos]
+    C -->|Falla| B
+    D --> E[Ajustes contables]
+    E --> F[Enviar a revisión]
+    F --> G[Aprobar / Rechazar]
+    G --> H[Certificar balance]
+    H --> I[PDF certificado + KPIs]

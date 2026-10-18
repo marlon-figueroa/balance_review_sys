@@ -1,0 +1,6 @@
+flowchart LR
+    BROWSER[Navegador :8080] --> NGINX[Nginx]
+    NGINX -->|estáticos /build| ASSETS[public/build]
+    NGINX -->|PHP| FPM[PHP-FPM app]
+    FPM --> MYSQL[(MySQL Podman)]
+    FPM --> VOL[Volúmenes storage]

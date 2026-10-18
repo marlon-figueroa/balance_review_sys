@@ -7,6 +7,7 @@ Sistema MVP de revisión de balance contable: Laravel 12, Bootstrap 5, MySQL y P
 - [Arquitectura de componentes](docs/arquitectura-componentes.html)
 - [Podman (desarrollo local)](docs/podman.md)
 - [Ingesta CSV de balanza](docs/ingesta-balanza.md)
+- Manual del sistema (PDF): `npm run docs:diagrams` y `php artisan docs:manual-proyecto-pdf` → `docs/manual/manual-sistema.pdf`
 - Requerimientos del dominio: [balance_review_sistema.txt](balance_review_sistema.txt)
 
 ## Desarrollo local

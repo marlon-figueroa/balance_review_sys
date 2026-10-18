@@ -1,0 +1,14 @@
+{
+  "theme": "neo",
+  "themeVariables": {
+    "fontFamily": "DejaVu Sans, sans-serif",
+    "fontSize": "14px"
+  },
+  "flowchart": {
+    "curve": "basis",
+    "padding": 12
+  },
+  "sequence": {
+    "actorMargin": 40
+  }
+}

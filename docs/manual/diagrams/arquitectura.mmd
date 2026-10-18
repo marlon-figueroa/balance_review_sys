@@ -1,0 +1,20 @@
+flowchart TB
+    subgraph externos["Entorno"]
+        ERP["ERP / CSV balanza"]
+        USR["Usuarios financieros"]
+    end
+
+    subgraph app["Sistema revisión de balance"]
+        UI["Blade + Bootstrap + Vite"]
+        API["Laravel 12"]
+        DOM["DomPDF reportes"]
+    end
+
+    DB[(MySQL 8.4)]
+
+    USR --> UI
+    ERP --> UI
+    UI --> API
+    API --> DB
+    API --> DOM
+    DOM --> USR
