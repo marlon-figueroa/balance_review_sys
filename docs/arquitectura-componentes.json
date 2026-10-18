@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Revisión de balance",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "ruta",
+        "label": "Ruta de revisión",
+        "focus": ["analistas", "interfaz", "revision", "libros"],
+        "note": "El analista carga los saldos; Laravel los procesa y MySQL los conserva."
+      },
+      {
+        "id": "entradas",
+        "label": "Entradas externas",
+        "focus": ["erp", "auxiliares", "analistas"],
+        "note": "La balanza, el mayor y las conciliaciones llegan con el equipo financiero."
+      },
+      {
+        "id": "control",
+        "label": "Control y entrega",
+        "focus": ["acceso", "revision", "gerencia"],
+        "note": "El rol autoriza el ajuste y la gerencia recibe el balance certificado."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "erp",
+      "type": "external",
+      "label": "ERP contable",
+      "sublabel": "Balanza y mayor",
+      "pos": [32, 56],
+      "size": [200, 76]
+    },
+    {
+      "id": "acceso",
+      "type": "security",
+      "label": "Control de acceso",
+      "sublabel": "Tres roles",
+      "tag": "Policies",
+      "pos": [686, 56],
+      "size": [200, 76]
+    },
+    {
+      "id": "analistas",
+      "type": "external",
+      "label": "Equipo financiero",
+      "sublabel": "Analistas",
+      "pos": [32, 204],
+      "size": [200, 76]
+    },
+    {
+      "id": "interfaz",
+      "type": "frontend",
+      "label": "Bootstrap",
+      "sublabel": "Blade + Bootstrap",
+      "tag": "UI",
+      "pos": [359, 204],
+      "size": [200, 76]
+    },
+    {
+      "id": "revision",
+      "type": "backend",
+      "label": "Laravel",
+      "sublabel": "Revisión de balance",
+      "tag": "HTTP",
+      "pos": [686, 204],
+      "size": [200, 76]
+    },
+    {
+      "id": "libros",
+      "type": "database",
+      "label": "MySQL",
+      "sublabel": "Libros y auditoría",
+      "tag": ":3306",
+      "brand": "mysql",
+      "pos": [1013, 204],
+      "size": [200, 76]
+    },
+    {
+      "id": "auxiliares",
+      "type": "external",
+      "label": "Bancos y auxiliares",
+      "sublabel": "Conciliaciones",
+      "pos": [32, 348],
+      "size": [200, 76]
+    },
+    {
+      "id": "gerencia",
+      "type": "external",
+      "label": "Alta gerencia",
+      "sublabel": "Decisiones",
+      "pos": [686, 348],
+      "size": [200, 76]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Podman",
+      "wraps": ["interfaz", "acceso", "revision", "libros"],
+      "pad": 36
+    },
+    {
+      "kind": "security-group",
+      "label": "Segregación de funciones",
+      "wraps": ["acceso", "revision"],
+      "pad": 22
+    }
+  ],
+  "connections": [
+    {
+      "id": "erp-analistas",
+      "from": "erp",
+      "to": "analistas",
+      "label": "balanza y mayor",
+      "labelDy": 24
+    },
+    {
+      "id": "auxiliares-analistas",
+      "from": "auxiliares",
+      "to": "analistas",
+      "label": "estados y auxiliares"
+    },
+    {
+      "id": "analistas-interfaz",
+      "from": "analistas",
+      "to": "interfaz",
+      "label": "carga HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "interfaz-revision",
+      "from": "interfaz",
+      "to": "revision",
+      "label": "HTTP",
+      "variant": "emphasis"
+    },
+    {
+      "id": "revision-libros",
+      "from": "revision",
+      "to": "libros",
+      "label": "SQL",
+      "variant": "emphasis"
+    },
+    {
+      "id": "acceso-revision",
+      "from": "acceso",
+      "to": "revision",
+      "label": "autoriza rol",
+      "variant": "security",
+      "labelDy": 24
+    },
+    {
+      "id": "revision-gerencia",
+      "from": "revision",
+      "to": "gerencia",
+      "label": "reportes y KPIs",
+      "labelDy": 24
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Podman",
+      "items": [
+        "Contenedor Laravel con vistas Blade y Bootstrap",
+        "Contenedor MySQL para libros, hallazgos y auditoría",
+        "Red interna del pod entre la aplicación y la base"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Proceso de revisión",
+      "items": [
+        "Integridad: Activo = Pasivo + Patrimonio",
+        "Conciliación con bancos, CxC, CxP, inventario y activos",
+        "Variaciones, anomalías y asientos de ajuste"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Control",
+      "items": [
+        "Quien registra no revisa ni aprueba",
+        "Alertas si liquidez o endeudamiento superan el umbral",
+        "Pista de auditoría: quién cambió qué y cuándo"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Salidas",
+      "items": [
+        "Balance general ajustado",
+        "Informe de hallazgos y desviaciones",
+        "KPIs y recomendaciones a la gerencia"
+      ]
+    }
+  ]
+}

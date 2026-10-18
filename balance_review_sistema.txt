@@ -1,0 +1,70 @@
+Desde la **ingeniería de requerimientos y el enfoque de sistemas**, una revisión de balance (*balance review*) deja de verse solo como una tarea contable tradicional y pasa a modelarse como un **subsistema de procesamiento de información y control financiero**.
+
+Bajo esta óptica, el sistema toma datos económicos brutos, los procesa bajo reglas de negocio y normativas, y genera inteligencia financiera para la toma de decisiones.
+
+---
+
+## 1. Frontera del Sistema (*Boundary*)
+
+Define los límites entre el proceso de revisión de balance y su entorno:
+
+* **Dentro de la frontera:** Los libros contables, los estados financieros preliminares, las conciliaciones bancarias, las reglas de validación internas, las herramientas de software contable (ERP) y el equipo financiero/analistas a cargo de la revisión.
+* **Fuera de la frontera:** Las transacciones operativas diarias (que ocurren en los sistemas de ventas o inventario antes de ser contabilizadas), los reguladores fiscales externos (como el Ministerio de Hacienda), las entidades bancarias y la alta gerencia que recibe el reporte final.
+
+---
+
+## 2. Entradas (*Inputs*)
+
+Son los flujos de datos e información que ingresan al sistema para ser analizados:
+
+* **Balanza de Comprobación (*Trial Balance*)** y Libro Mayor (*General Ledger*).
+* **Estados de cuenta bancarios** y registros de conciliación.
+* **Subsistemas auxiliares:** Cuentas por cobrar, cuentas por pagar, inventarios y activos fijos.
+* **Requerimientos de cumplimiento y normativas:** Marcos contables aplicables (ej. NIIF/IFRS) y políticas financieras internas.
+* **Datos históricos:** Balances de periodos anteriores para análisis comparativo y de tendencias.
+
+---
+
+## 3. Proceso (*Process*)
+
+Es el núcleo transformacional donde los datos crudos se convierten en información estructurada y verificada:
+
+1. **Ingesta y Validación de Integridad:** Verificación de que la ecuación contable fundamental se cumpla ($Activo = Pasivo + Patrimonio$).
+2. **Conciliación Cruzada:** Emparejamiento de saldos contables con fuentes externas (bancos, inventario físico, confirmaciones de terceros).
+3. **Análisis de Variaciones:** Cálculo de diferencias porcentuales y absolutas frente al periodo anterior o al presupuesto base.
+4. **Detección de Anomalías:** Identificación de partidas atípicas, saldos negativos inesperados o errores de clasificación.
+5. **Generación de Ajustes:** Propuesta y registro de asientos de ajuste contable derivados de los hallazgos.
+
+---
+
+## 4. Control (*Control & Feedback Loops*)
+
+Mecanismos de regulación y retroalimentación que aseguran la calidad y seguridad del sistema:
+
+* **Controles internos:** Segregación de funciones (quien registra no es quien revisa ni aprueba los ajustes).
+* **Alertas por umbrales:** Disparadores automáticos si un ratio financiero (ej. liquidez o endeudamiento) supera los límites de riesgo permitidos.
+* **Auditoría de trazabilidad:** Logs y pistas de auditoría en el software contable que registran quién modificó qué y cuándo.
+* **Retroalimentación:** Ajuste de las políticas contables o de los controles preventivos en los sistemas transaccionales para evitar errores recurrentes.
+
+---
+
+## 5. Salidas (*Outputs*)
+
+Los productos terminados que el sistema entrega a sus usuarios o sistemas consumidores:
+
+* **Balance General Ajustado y Certificado** (Estado de Situación Financiera definitivo).
+* **Informe de Hallazgos y Desviaciones** (Identificación de riesgos financieros o errores corregidos).
+* **Indicadores Financieros Clave (KPIs):** Ratios de liquidez, solvencia, rentabilidad y capital de trabajo.
+* **Recomendaciones de Acción:** Propuestas estratégicas para la gerencia basadas en la salud financiera observada.
+
+---
+
+## 6. Ambiente (*Environment*)
+
+El contexto macro y microexterno que afecta el comportamiento del sistema:
+
+* **Entorno Económico:** Tasas de interés, inflación y volatilidad del mercado que impactan la valoración de activos y pasivos.
+* **Entorno Tecnológico:** La infraestructura del ERP, la ciberseguridad de los datos financieros y la automatización de procesos.
+* **Entorno Legal/Regulatorio:** Cambios en las leyes tributarias o normativas contables que obliguen a modificar las reglas del proceso de revisión.
+
+---
