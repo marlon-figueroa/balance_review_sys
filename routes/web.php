@@ -8,7 +8,10 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\Revisiones\AjusteContableController;
+use App\Http\Controllers\Revisiones\CargarCatalogoBalanzaController;
+use App\Http\Controllers\Revisiones\CatalogoCuentaController;
 use App\Http\Controllers\Revisiones\ConciliacionController;
+use App\Http\Controllers\Revisiones\ExportCatalogoCsvController;
 use App\Http\Controllers\Revisiones\FlujoController;
 use App\Http\Controllers\Revisiones\ImportBalanzaController;
 use App\Http\Controllers\Revisiones\PeriodoRevisionController;
@@ -67,9 +70,16 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('revisiones')->name('revisiones.')->group(function () {
+        Route::get('catalogo/exportar-csv', ExportCatalogoCsvController::class)->name('catalogo.exportar-csv');
+        Route::post('catalogo/data', [CatalogoCuentaController::class, 'data'])->name('catalogo.data');
+        Route::resource('catalogo', CatalogoCuentaController::class)
+            ->parameters(['catalogo' => 'cuenta'])
+            ->except('show');
+
         Route::get('bandeja', [PeriodoRevisionController::class, 'bandeja'])->name('bandeja');
         Route::post('data', [PeriodoRevisionController::class, 'data'])->name('data');
         Route::post('{periodo}/importar-balanza', ImportBalanzaController::class)->name('importar-balanza');
+        Route::post('{periodo}/cargar-catalogo', CargarCatalogoBalanzaController::class)->name('cargar-catalogo');
         Route::post('{periodo}/conciliaciones', [ConciliacionController::class, 'store'])->name('conciliaciones.store');
         Route::delete('{periodo}/conciliaciones/{conciliacion}', [ConciliacionController::class, 'destroy'])->name('conciliaciones.destroy');
         Route::post('{periodo}/ajustes', [AjusteContableController::class, 'store'])->name('ajustes.store');

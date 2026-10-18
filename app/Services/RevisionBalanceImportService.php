@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Enums\NaturalezaCuenta;
-use App\Models\LineaBalanza;
+use App\Models\CuentaContable;
 use App\Models\PeriodoRevision;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -75,6 +75,8 @@ class RevisionBalanceImportService
             throw ValidationException::withMessages(['archivo' => 'No hay filas de datos en el CSV.']);
         }
 
+        $lineas = $this->validarContraCatalogo($lineas);
+
         return DB::transaction(function () use ($periodo, $lineas) {
             $periodo->lineasBalanza()->delete();
 
@@ -86,5 +88,43 @@ class RevisionBalanceImportService
 
             return count($lineas);
         });
+    }
+
+    /**
+     * @param  list<array{codigo_cuenta: string, nombre: string, naturaleza: NaturalezaCuenta, debe: float, haber: float, saldo: float}>  $lineas
+     * @return list<array{codigo_cuenta: string, nombre: string, naturaleza: NaturalezaCuenta, debe: float, haber: float, saldo: float}>
+     */
+    private function validarContraCatalogo(array $lineas): array
+    {
+        if (! config('balance_review.validar_catalogo')) {
+            return $lineas;
+        }
+
+        $catalogo = CuentaContable::query()->activas()->get()->keyBy('codigo');
+        if ($catalogo->isEmpty()) {
+            return $lineas;
+        }
+
+        $enriquecer = config('balance_review.enriquecer_import_desde_catalogo');
+
+        foreach ($lineas as $indice => $fila) {
+            $cuenta = $catalogo->get($fila['codigo_cuenta']);
+            if ($cuenta === null) {
+                throw ValidationException::withMessages([
+                    'archivo' => "La cuenta {$fila['codigo_cuenta']} (fila ".($indice + 2).') no está en el catálogo activo.',
+                ]);
+            }
+
+            if ($enriquecer) {
+                $lineas[$indice]['nombre'] = $cuenta->nombre;
+                $lineas[$indice]['naturaleza'] = $cuenta->naturaleza;
+            } elseif ($fila['naturaleza'] !== $cuenta->naturaleza) {
+                throw ValidationException::withMessages([
+                    'archivo' => "La naturaleza de {$fila['codigo_cuenta']} no coincide con el catálogo ({$cuenta->naturaleza->value}).",
+                ]);
+            }
+        }
+
+        return $lineas;
     }
 }

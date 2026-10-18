@@ -18,6 +18,7 @@ return [
             ['label' => 'Listado', 'icon' => 'list', 'route' => 'revisiones.index', 'active' => ['revisiones.index', 'revisiones.create', 'revisiones.show', 'revisiones.edit'], 'can' => 'revisiones.ver'],
             ['label' => 'Nueva revisión', 'icon' => 'plus-circle', 'route' => 'revisiones.create', 'can' => 'revisiones.crear'],
             ['label' => 'Bandeja revisor', 'icon' => 'inbox', 'route' => 'revisiones.bandeja', 'can' => 'revisiones.revisar'],
+            ['label' => 'Catálogo de cuentas', 'icon' => 'journal-text', 'route' => 'revisiones.catalogo.index', 'can' => 'catalogo.ver'],
         ],
     ],
     [

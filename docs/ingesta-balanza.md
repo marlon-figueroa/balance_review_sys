@@ -1,6 +1,8 @@
 # Ingesta de balanza (CSV)
 
-Cada periodo en estado **borrador** permite importar una balanza de comprobación mediante CSV.
+Cada periodo en estado **borrador** permite alimentar la balanza desde el **catálogo de cuentas** (estructura con saldos en cero, balanza demostrativa equilibrada o CSV exportado desde el catálogo) o importar un CSV propio.
+
+El catálogo demostrativo se carga con `php artisan db:seed --class=CatalogoCuentasDemoSeeder`. Los códigos deben existir en el catálogo activo cuando `BALANCE_VALIDAR_CATALOGO=true` (valor por defecto).
 
 ## Columnas requeridas
 

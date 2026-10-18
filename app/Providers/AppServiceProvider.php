@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\AjusteContable;
 use App\Models\Conciliacion;
+use App\Models\CuentaContable;
 use App\Models\Hallazgo;
 use App\Models\LineaBalanza;
 use App\Models\PeriodoRevision;
@@ -43,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
         User::observe(BitacoraObserver::class);
         Role::observe(BitacoraObserver::class);
         Permission::observe(BitacoraObserver::class);
+        CuentaContable::observe(BitacoraObserver::class);
         PeriodoRevision::observe(BitacoraObserver::class);
         LineaBalanza::observe(BitacoraObserver::class);
         Conciliacion::observe(BitacoraObserver::class);

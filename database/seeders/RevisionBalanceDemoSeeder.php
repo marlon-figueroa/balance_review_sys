@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Enums\EstadoPeriodoRevision;
-use App\Enums\NaturalezaCuenta;
 use App\Models\PeriodoRevision;
 use App\Models\User;
+use App\Services\RevisionBalanceCatalogoService;
 use App\Services\RevisionBalanceProcesoService;
 use Illuminate\Database\Seeder;
 
@@ -20,6 +20,7 @@ class RevisionBalanceDemoSeeder extends Seeder
         $registrador = User::role('Registrador')->first() ?? User::first();
         $aprobador = User::role('Aprobador')->first() ?? User::first();
         $proceso = app(RevisionBalanceProcesoService::class);
+        $catalogo = app(RevisionBalanceCatalogoService::class);
 
         $certificado = PeriodoRevision::create([
             'anio' => 2026,
@@ -30,7 +31,7 @@ class RevisionBalanceDemoSeeder extends Seeder
             'certificado_at' => now()->subMonth(),
         ]);
 
-        $this->lineasEquilibradas($certificado);
+        $catalogo->cargarDemostrativoEquilibrado($certificado);
         $certificado->conciliaciones()->create([
             'tipo' => 'banco',
             'referencia' => 'Cuenta operativa 001',
@@ -47,7 +48,7 @@ class RevisionBalanceDemoSeeder extends Seeder
             'usuario_creador_id' => $registrador->id,
         ]);
 
-        $this->lineasEquilibradas($borrador, variacion: true);
+        $catalogo->cargarDemostrativoEquilibrado($borrador, 1.35);
         $borrador->conciliaciones()->create([
             'tipo' => 'banco',
             'referencia' => 'Cuenta operativa 001',
@@ -56,29 +57,5 @@ class RevisionBalanceDemoSeeder extends Seeder
             'diferencia' => 500,
         ]);
         $proceso->ejecutar($borrador->fresh(['lineasBalanza', 'conciliaciones']));
-    }
-
-    private function lineasEquilibradas(PeriodoRevision $periodo, bool $variacion = false): void
-    {
-        $factor = $variacion ? 1.35 : 1.0;
-        $lineas = [
-            ['1101', 'Caja', NaturalezaCuenta::Activo, 10000 * $factor],
-            ['1102', 'Bancos', NaturalezaCuenta::Activo, 50000 * $factor],
-            ['1201', 'Inventarios', NaturalezaCuenta::Activo, 40000],
-            ['2101', 'Proveedores', NaturalezaCuenta::Pasivo, 30000],
-            ['2201', 'Préstamos CP', NaturalezaCuenta::Pasivo, 20000],
-            ['3101', 'Capital social', NaturalezaCuenta::Patrimonio, 50000],
-        ];
-
-        foreach ($lineas as [$codigo, $nombre, $naturaleza, $saldo]) {
-            $periodo->lineasBalanza()->create([
-                'codigo_cuenta' => $codigo,
-                'nombre' => $nombre,
-                'naturaleza' => $naturaleza,
-                'debe' => $saldo,
-                'haber' => 0,
-                'saldo' => $saldo,
-            ]);
-        }
     }
 }

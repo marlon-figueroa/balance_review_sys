@@ -6,6 +6,7 @@ use App\Enums\EstadoPeriodoRevision;
 use App\Enums\NaturalezaCuenta;
 use App\Models\PeriodoRevision;
 use App\Models\User;
+use Database\Seeders\CatalogoCuentasDemoSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -19,6 +20,7 @@ class RevisionBalanceFlujoTest extends TestCase
     {
         parent::setUp();
         $this->seed(RolesAndPermissionsSeeder::class);
+        $this->seed(CatalogoCuentasDemoSeeder::class);
     }
 
     public function test_importacion_csv_valida_integridad(): void

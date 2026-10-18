@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Revisiones;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Revisiones\PeriodoRevisionRequest;
+use App\Models\CuentaContable;
 use App\Models\PeriodoRevision;
 use App\Services\RevisionBalanceFlujoService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -83,6 +84,7 @@ class PeriodoRevisionController extends Controller
         return view('revisiones.show', [
             'periodo' => $periodo,
             'accionesFlujo' => $flujo->accionesDisponibles($periodo, auth()->user()),
+            'cuentasCatalogo' => CuentaContable::query()->activas()->ordenadas()->get(['codigo', 'nombre']),
         ]);
     }
 

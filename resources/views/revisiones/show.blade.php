@@ -54,16 +54,40 @@
     <div class="tab-content card border-top-0 rounded-top-0">
         <div class="tab-pane fade show active p-3" id="tab-balanza">
             @can('import', $periodo)
-                <form method="POST" action="{{ route('revisiones.importar-balanza', $periodo) }}" enctype="multipart/form-data" class="row g-2 align-items-end mb-3">
-                    @csrf
-                    <div class="col-md-8">
-                        <label class="form-label">Importar CSV de balanza</label>
-                        <input type="file" name="archivo" class="form-control" accept=".csv,text/csv" required>
+                <div class="row g-2 mb-3">
+                    <div class="col-lg-7">
+                        <form method="POST" action="{{ route('revisiones.importar-balanza', $periodo) }}" enctype="multipart/form-data" class="row g-2 align-items-end">
+                            @csrf
+                            <div class="col-md-8">
+                                <label class="form-label">Importar CSV de balanza</label>
+                                <input type="file" name="archivo" class="form-control" accept=".csv,text/csv" required>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-primary w-100">Importar</button>
+                            </div>
+                        </form>
+                        <p class="form-text mb-0 mt-1">
+                            Use el <a href="{{ route('revisiones.catalogo.index') }}">catálogo de cuentas</a> o descargue
+                            <a href="{{ route('revisiones.catalogo.exportar-csv') }}">plantilla CSV</a> /
+                            <a href="{{ route('revisiones.catalogo.exportar-csv', ['demo' => 1]) }}">CSV demostrativo</a>.
+                        </p>
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-primary w-100">Importar</button>
+                    <div class="col-lg-5">
+                        <label class="form-label">Cargar desde catálogo</label>
+                        <div class="d-flex flex-wrap gap-2">
+                            <form method="POST" action="{{ route('revisiones.cargar-catalogo', $periodo) }}" class="d-inline">
+                                @csrf
+                                <input type="hidden" name="modo" value="estructura">
+                                <button type="submit" class="btn btn-outline-secondary btn-sm">Estructura (saldos en cero)</button>
+                            </form>
+                            <form method="POST" action="{{ route('revisiones.cargar-catalogo', $periodo) }}" class="d-inline">
+                                @csrf
+                                <input type="hidden" name="modo" value="demo">
+                                <button type="submit" class="btn btn-outline-primary btn-sm">Balanza demostrativa</button>
+                            </form>
+                        </div>
                     </div>
-                </form>
+                </div>
             @endcan
             <div class="table-responsive">
                 <table class="table table-sm table-striped">
@@ -79,7 +103,7 @@
                                 <td>{{ number_format((float) $linea->saldo, 2) }}</td>
                             </tr>
                         @empty
-                            <tr><td colspan="6" class="text-center text-body-secondary">Sin líneas. Importe un CSV.</td></tr>
+                            <tr><td colspan="6" class="text-center text-body-secondary">Sin líneas. Cargue el catálogo o importe un CSV.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -133,7 +157,14 @@
             @can('update', $periodo)
                 <form method="POST" action="{{ route('revisiones.ajustes.store', $periodo) }}" class="row g-2 mb-3">
                     @csrf
-                    <div class="col-md-2"><input name="codigo_cuenta" class="form-control" placeholder="Cuenta" required></div>
+                    <div class="col-md-3">
+                        <input name="codigo_cuenta" class="form-control" list="catalogo-cuentas-ajuste" placeholder="Código de cuenta" required autocomplete="off">
+                        <datalist id="catalogo-cuentas-ajuste">
+                            @foreach ($cuentasCatalogo as $cuenta)
+                                <option value="{{ $cuenta->codigo }}">{{ $cuenta->nombre }}</option>
+                            @endforeach
+                        </datalist>
+                    </div>
                     <div class="col-md-2"><input name="monto" type="number" step="0.01" class="form-control" placeholder="Monto" required></div>
                     <div class="col-md-5"><input name="descripcion" class="form-control" placeholder="Descripción" required></div>
                     <div class="col-md-2"><button class="btn btn-primary w-100">Proponer</button></div>

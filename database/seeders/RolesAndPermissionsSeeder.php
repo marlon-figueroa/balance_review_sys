@@ -16,6 +16,7 @@ class RolesAndPermissionsSeeder extends Seeder
         'bitacora' => ['ver', 'exportar', 'invalidar_sesion'],
         'monitoreo' => ['pulse', 'logs'],
         'revisiones' => ['ver', 'crear', 'editar', 'enviar', 'revisar', 'aprobar', 'certificar', 'reportes'],
+        'catalogo' => ['ver', 'gestionar'],
     ];
 
     public function run(): void
@@ -33,23 +34,28 @@ class RolesAndPermissionsSeeder extends Seeder
             'revisiones.crear',
             'revisiones.editar',
             'revisiones.enviar',
+            'catalogo.ver',
+            'catalogo.gestionar',
         ]);
 
         Role::findOrCreate('Revisor', 'web')->syncPermissions([
             'revisiones.ver',
             'revisiones.revisar',
             'revisiones.aprobar',
+            'catalogo.ver',
         ]);
 
         Role::findOrCreate('Aprobador', 'web')->syncPermissions([
             'revisiones.ver',
             'revisiones.aprobar',
             'revisiones.certificar',
+            'catalogo.ver',
         ]);
 
         Role::findOrCreate('Gerencia', 'web')->syncPermissions([
             'revisiones.ver',
             'revisiones.reportes',
+            'catalogo.ver',
         ]);
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();

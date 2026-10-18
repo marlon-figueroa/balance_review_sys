@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'validar_catalogo' => (bool) env('BALANCE_VALIDAR_CATALOGO', true),
+    'enriquecer_import_desde_catalogo' => (bool) env('BALANCE_ENRIQUECER_IMPORT_CATALOGO', true),
     'saldo_material' => 1000,
     'variacion_porcentaje_alerta' => 25,
     'prefijos' => [

@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\AjusteContable;
 use App\Models\Conciliacion;
+use App\Models\CuentaContable;
 use App\Models\Hallazgo;
 use App\Models\LineaBalanza;
 use App\Models\PeriodoRevision;
@@ -19,6 +20,7 @@ class BitacoraObserver
         User::class => 'usuarios',
         Role::class => 'roles',
         Permission::class => 'permisos',
+        CuentaContable::class => 'catálogo de cuentas',
         PeriodoRevision::class => 'revisiones de balance',
         LineaBalanza::class => 'líneas de balanza',
         Conciliacion::class => 'conciliaciones',
