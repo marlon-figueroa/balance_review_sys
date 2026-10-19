@@ -57,8 +57,8 @@
         .indice a { color: #212529; text-decoration: none; }
         .diagrama-manual { margin: 12pt 0 16pt; page-break-inside: avoid; }
         .diagrama-manual__titulo { font-weight: bold; font-size: 10pt; margin-bottom: 6pt; color: #495057; }
-        .diagrama-manual__svg { text-align: center; }
-        .diagrama-manual__svg svg { max-width: 100%; height: auto; }
+        .diagrama-manual__img { text-align: center; }
+        .diagrama-manual__img img { max-width: 100%; height: auto; }
         .diagrama-manual__leyenda { font-size: 9pt; color: #6c757d; margin-top: 6pt; font-style: italic; }
         .diagrama-manual__faltante { font-size: 9pt; color: #856404; background: #fff3cd; padding: 8pt; border: 1px solid #ffecb5; }
         table.roles { width: 100%; border-collapse: collapse; margin: 10pt 0; font-size: 10pt; }
@@ -143,7 +143,7 @@
             gestionan con Spatie Laravel Permission.
         </p>
         @include('pdf.partials.diagrama-manual', [
-            'svg' => $diagramas['roles'] ?? null,
+            'imagen' => $diagramas['roles'] ?? null,
             'titulo' => 'Diagrama 1 — Roles y cadena de responsabilidad (Mermaid, tema neo)',
         ])
         <table class="roles">
@@ -167,7 +167,7 @@
             a borrador para corrección y nuevo envío.
         </p>
         @include('pdf.partials.diagrama-manual', [
-            'svg' => $diagramas['flujo_estados'] ?? null,
+            'imagen' => $diagramas['flujo_estados'] ?? null,
             'titulo' => 'Diagrama 2 — Máquina de estados UML (Mermaid, tema neo)',
         ])
     </section>
@@ -175,7 +175,7 @@
     <section id="proceso">
         <h2>5. Proceso funcional por periodo</h2>
         @include('pdf.partials.diagrama-manual', [
-            'svg' => $diagramas['proceso_periodo'] ?? null,
+            'imagen' => $diagramas['proceso_periodo'] ?? null,
             'titulo' => 'Diagrama 3 — Pipeline de revisión (Mermaid, tema neo)',
             'leyenda' => 'La integridad debe cumplirse antes de enviar a revisión.',
         ])
@@ -198,7 +198,7 @@
     <section id="arquitectura">
         <h2>7. Arquitectura de componentes</h2>
         @include('pdf.partials.diagrama-manual', [
-            'svg' => $diagramas['arquitectura'] ?? null,
+            'imagen' => $diagramas['arquitectura'] ?? null,
             'titulo' => 'Diagrama 4 — Vista lógica (Mermaid, tema neo)',
         ])
         <p>
@@ -210,7 +210,7 @@
     <section id="despliegue" class="salto">
         <h2>8. Despliegue con Podman</h2>
         @include('pdf.partials.diagrama-manual', [
-            'svg' => $diagramas['despliegue'] ?? null,
+            'imagen' => $diagramas['despliegue'] ?? null,
             'titulo' => 'Diagrama 5 — Contenedores (Mermaid, tema neo)',
         ])
         <p>

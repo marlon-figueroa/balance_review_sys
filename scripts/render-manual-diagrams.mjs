@@ -1,14 +1,13 @@
-import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const diagramsDir = join(root, 'docs/manual/diagrams');
-const svgDir = join(root, 'docs/manual/svg');
-const config = join(root, 'docs/manual/mermaid-config.json');
+const pngDir = join(root, 'docs/manual/png');
+const krokiBase = process.env.KROKI_URL ?? 'https://kroki.io';
 
-mkdirSync(svgDir, { recursive: true });
+mkdirSync(pngDir, { recursive: true });
 
 const files = [
     'flujo-estados.mmd',
@@ -18,22 +17,30 @@ const files = [
     'despliegue.mmd',
 ];
 
-const mmdc = join(root, 'node_modules/.bin/mmdc');
+const encabezadoNeo = "%%{init: {'theme':'neo','themeVariables':{'fontFamily':'DejaVu Sans, sans-serif'}}}%%\n";
 
 for (const file of files) {
     const input = join(diagramsDir, file);
-    const output = join(svgDir, file.replace(/\.mmd$/, '.svg'));
+    const output = join(pngDir, file.replace(/\.mmd$/, '.png'));
 
     if (!existsSync(input)) {
         throw new Error(`Falta diagrama: ${input}`);
     }
 
-    execFileSync(mmdc, [
-        '-i', input,
-        '-o', output,
-        '-c', config,
-        '-b', 'transparent',
-    ], { stdio: 'inherit', cwd: root });
+    const fuente = encabezadoNeo + readFileSync(input, 'utf8');
+    const respuesta = await fetch(`${krokiBase}/mermaid/png`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: fuente,
+    });
+
+    if (!respuesta.ok) {
+        const detalle = await respuesta.text();
+        throw new Error(`Kroki falló (${respuesta.status}) para ${file}: ${detalle.slice(0, 200)}`);
+    }
+
+    writeFileSync(output, Buffer.from(await respuesta.arrayBuffer()));
+    console.log(`OK ${output}`);
 }
 
-console.log(`Diagramas SVG generados en ${svgDir}`);
+console.log(`Diagramas PNG (Mermaid tema neo) en ${pngDir}`);

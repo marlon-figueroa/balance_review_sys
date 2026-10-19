@@ -1,9 +1,8 @@
 # Manual del sistema (PDF)
 
-Diagramas en [diagrams/](diagrams/) con **tema Mermaid `neo`**. Los SVG se generan en [svg/](svg/).
+Diagramas en [diagrams/](diagrams/) con **tema Mermaid `neo`**. Los PNG para el PDF se generan en [png/](png/) vía [Kroki](https://kroki.io) (`npm run docs:diagrams`, requiere red).
 
 ```bash
-npm install
 npm run docs:diagrams
 php artisan docs:manual-proyecto-pdf
 ```

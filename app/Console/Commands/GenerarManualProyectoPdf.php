@@ -18,7 +18,7 @@ class GenerarManualProyectoPdf extends Command
         $datos = $manual->datos();
 
         if ($datos['faltanDiagramas']) {
-            $this->warn('Faltan SVG en docs/manual/svg. Ejecute: npm run docs:diagrams');
+            $this->warn('Faltan PNG en docs/manual/png. Ejecute: npm run docs:diagrams');
         }
 
         $salida = $this->option('output') ?? base_path('docs/manual/manual-sistema.pdf');
